@@ -1,0 +1,16 @@
+{
+  "name": "Agri Extension Studio",
+  "short_name": "AgriStudio",
+  "description": "ระบบยืม-คืนอุปกรณ์สตูดิโอส่งเสริมการเกษตร",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#1e293b",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3178/3178283.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png"
+    }
+  ]
+}

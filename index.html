@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Agri Extension Studio</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e293b">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Prompt', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: 80px; }
+    
+    /* Header */
+    header { background: #1e293b; color: white; padding: 18px 20px; position: sticky; top: 0; z-index: 50; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    header h1 { font-size: 1.15rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    header p { font-size: 0.75rem; color: #94a3b8; margin-top: 2px; }
+
+    /* Nav Bar */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid var(--border); display: flex; z-index: 100; height: 65px; }
+    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--text-muted); cursor: pointer; transition: 0.2s; border: none; background: none; }
+    .nav-item.active { color: var(--primary-dark); font-weight: 600; }
+    .nav-item span { font-size: 1.3rem; margin-bottom: 2px; }
+
+    /* Container */
+    .container { max-width: 600px; margin: 0 auto; padding: 16px; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Cards & Form */
+    .card { background: var(--card); border-radius: 14px; padding: 18px; border: 1px solid var(--border); margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .card h2 { font-size: 1.05rem; font-weight: 600; margin-bottom: 12px; color: #1e293b; display: flex; justify-content: space-between; align-items: center; }
+    
+    .item-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .item-card { border: 1.5px solid var(--border); border-radius: 10px; padding: 12px; display: flex; align-items: flex-start; gap: 12px; cursor: pointer; transition: 0.2s; }
+    .item-card.selected { border-color: var(--primary); background: #ecfdf5; }
+    .item-card.disabled { opacity: 0.55; cursor: not-allowed; background: #f1f5f9; }
+    .item-info h4 { font-size: 0.95rem; font-weight: 600; }
+    .item-info p { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+    .badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; font-weight: 500; display: inline-block; margin-top: 4px; }
+    .badge-available { background: #dcfce7; color: #15803d; }
+    .badge-borrowed { background: #ffedd5; color: #c2410c; }
+    .badge-maintenance { background: #fee2e2; color: #b91c1c; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 6px; }
+    .form-group input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none; transition: 0.2s; }
+    .form-group input:focus { border-color: var(--primary); ring: 2px solid #a7f3d0; }
+
+    /* Signature Pad */
+    .sig-wrapper { border: 1.5px dashed #cbd5e1; border-radius: 8px; background: #ffffff; position: relative; }
+    canvas { width: 100%; height: 160px; display: block; touch-action: none; border-radius: 8px; }
+    .sig-tools { display: flex; justify-content: flex-end; padding: 6px 10px; border-top: 1px solid var(--border); background: #f8fafc; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+    .btn-clear { background: none; border: none; color: var(--danger); font-size: 0.8rem; cursor: pointer; font-weight: 500; }
+
+    /* Buttons */
+    .btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3); }
+    .btn-primary:active { background: var(--primary-dark); }
+    .btn-primary:disabled { background: #cbd5e1; cursor: not-allowed; box-shadow: none; }
+
+    /* Status Items */
+    .loan-item { border-left: 4px solid var(--warning); border-radius: 8px; padding: 12px 14px; background: white; margin-bottom: 10px; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .loan-item.approved { border-left-color: var(--primary); }
+    .loan-item.overdue { border-left-color: var(--danger); }
+    
+    .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.85); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 200; }
+    .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📹 Agri Extension Studio</h1>
+    <p>ระบบบริหารจัดการยืม-คืนอุปกรณ์สตูดิโอ</p>
+  </header>
+
+  <div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    <p id="loading-text" style="font-size:0.9rem; font-weight:500;">กำลังประมวลผล...</p>
+  </div>
+
+  <main class="container">
+    <!-- TAB 1: ยืมอุปกรณ์ -->
+    <section id="tab-borrow" class="tab-content active">
+      <div class="card">
+        <h2>1. เลือกอุปกรณ์ที่ต้องการยืม <span style="font-size:0.8rem; font-weight:400; color:var(--text-muted);" id="selected-count">เลือก 0 ชิ้น</span></h2>
+        <div class="item-grid" id="inventory-list">
+          <p style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding: 20px;">กำลังโหลดรายการอุปกรณ์...</p>
+        </div>
+      </div>
+
+      <form id="borrow-form" onsubmit="handleBorrowSubmit(event)">
+        <div class="card">
+          <h2>2. ข้อมูลผู้ยืม</h2>
+          <div class="form-group">
+            <label>รหัสนักศึกษา *</label>
+            <input type="text" id="student-id" placeholder="เช่น 65012345" required>
+          </div>
+          <div class="form-group">
+            <label>ชื่อ-นามสกุล *</label>
+            <input type="text" id="student-name" placeholder="นาย/นางสาว ใจดี รักเรียน" required>
+          </div>
+          <div class="form-group">
+            <label>กำหนดส่งคืน (วันและเวลา) *</label>
+            <input type="datetime-local" id="due-date" required>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>3. ลายเซ็นดิจิทัลผู้ยืม</h2>
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom: 8px;">ผู้ลงนามยอมรับเงื่อนไขการดูแลอุปกรณ์และอุปกรณ์เสริมครบถ้วน</p>
+          <div class="sig-wrapper">
+            <canvas id="sig-pad"></canvas>
+            <div class="sig-tools">
+              <button type="button" class="btn-clear" onclick="clearSignature()">ล้างลายเซ็น</button>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" id="btn-submit" style="margin-top: 8px;">ส่งคำขอยืมอุปกรณ์</button>
+      </form>
+    </section>
+
+    <!-- TAB 2: ตรวจสอบสถานะ -->
+    <section id="tab-status" class="tab-content">
+      <div class="card">
+        <h2>รายการที่กำลังยืมขณะนี้</h2>
+        <div id="active-loans-list">
+          <p style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding: 20px;">กำลังดึงข้อมูล...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: เจ้าหน้าที่รับคืน -->
+    <section id="tab-return" class="tab-content">
+      <div class="card">
+        <h2>สำหรับเจ้าหน้าที่ห้องสตูดิโอ</h2>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom: 12px;">แตะที่รายการด้านล่างเพื่อตรวจสอบของและใส่รหัส PIN รับคืน</p>
+        <div id="return-loans-list">
+          <p style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding: 20px;">กำลังดึงข้อมูล...</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('borrow')">
+      <span>📝</span> ยืมอุปกรณ์
+    </button>
+    <button class="nav-item" onclick="switchTab('status')">
+      <span>🔍</span> ตรวจสถานะ
+    </button>
+    <button class="nav-item" onclick="switchTab('return')">
+      <span>📦</span> เจ้าหน้าที่คืนของ
+    </button>
+  </nav>
+
+  <script>
+    // URL API จาก Google Apps Script (ติดตั้งเรียบร้อย)
+    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwmZrXt43bVHi9FFkhARvKuq30Ni9C5unHA0uVCrjH2DqPgiYOupwVtgQjcjvOcMWUrdg/exec";
+
+    let inventoryData = [];
+    let selectedItems = [];
+
+    // Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(console.error);
+    }
+
+    // Canvas Setup
+    const canvas = document.getElementById('sig-pad');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#0f172a';
+    }
+    window.addEventListener('resize', resizeCanvas);
+    setTimeout(resizeCanvas, 300);
+
+    function getTouchPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+    }
+
+    canvas.addEventListener('mousedown', (e) => { isDrawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); });
+    canvas.addEventListener('mousemove', (e) => { if (isDrawing) { ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } });
+    window.addEventListener('mouseup', () => isDrawing = false);
+
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const pos = getTouchPos(e);
+      isDrawing = true;
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    }, { passive: false });
+
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if (!isDrawing) return;
+      const pos = getTouchPos(e);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', () => isDrawing = false);
+
+    function clearSignature() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function isCanvasBlank() {
+      const blank = document.createElement('canvas');
+      blank.width = canvas.width;
+      blank.height = canvas.height;
+      return canvas.toDataURL() === blank.toDataURL();
+    }
+
+    // Tabs Switcher
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById('tab-' + tab).classList.add('active');
+      event.currentTarget.classList.add('active');
+
+      if (tab === 'borrow') loadInventory();
+      if (tab === 'status' || tab === 'return') loadActiveLoans(tab);
+    }
+
+    // Load Inventory
+    async function loadInventory() {
+      const list = document.getElementById('inventory-list');
+      try {
+        const res = await fetch(`${GAS_API_URL}?action=getInventory`);
+        const json = await res.json();
+        inventoryData = json.items;
+        renderInventory();
+      } catch (err) {
+        list.innerHTML = `<p style="color:red;font-size:0.85rem;text-align:center;">ไม่สามารถเชื่อมต่อระบบได้: ${err.message}</p>`;
+      }
+    }
+
+    function renderInventory() {
+      const list = document.getElementById('inventory-list');
+      list.innerHTML = '';
+      inventoryData.forEach(item => {
+        const isAvail = item.status === 'Available';
+        const isSelected = selectedItems.some(i => i.id === item.id);
+        const card = document.createElement('div');
+        card.className = `item-card ${isSelected ? 'selected' : ''} ${!isAvail ? 'disabled' : ''}`;
+        card.innerHTML = `
+          <div style="font-size:1.5rem;">${item.category === 'Camera' ? '📷' : item.category === 'Drone' ? '🛸' : item.category === 'Audio' ? '🎙️' : '💡'}</div>
+          <div class="item-info" style="flex:1;">
+            <h4>${item.name}</h4>
+            <p><strong>อุปกรณ์เสริม:</strong> ${item.accessories || '-'}</p>
+            <span class="badge ${isAvail ? 'badge-available' : item.status === 'Borrowed' ? 'badge-borrowed' : 'badge-maintenance'}">
+              ${isAvail ? '🟢 ว่างพร้อมยืม' : item.status === 'Borrowed' ? '🟠 ถูกยืมอยู่' : '🔴 ปิดปรับปรุง'}
+            </span>
+          </div>
+        `;
+        if (isAvail) {
+          card.onclick = () => toggleSelectItem(item);
+        }
+        list.appendChild(card);
+      });
+      document.getElementById('selected-count').innerText = `เลือก ${selectedItems.length} ชิ้น`;
+    }
+
+    function toggleSelectItem(item) {
+      const idx = selectedItems.findIndex(i => i.id === item.id);
+      if (idx > -1) {
+        selectedItems.splice(idx, 1);
+      } else {
+        selectedItems.push(item);
+      }
+      renderInventory();
+    }
+
+    // Handle Submit
+    async function handleBorrowSubmit(e) {
+      e.preventDefault();
+      if (selectedItems.length === 0) {
+        alert('กรุณาเลือกอุปกรณ์ที่ต้องการยืมอย่างน้อย 1 ชิ้น');
+        return;
+      }
+      if (isCanvasBlank()) {
+        alert('กรุณาเซ็นชื่อก่อนส่งคำขอ');
+        return;
+      }
+
+      showLoading(true, 'กำลังบันทึกลายเซ็นและส่งข้อมูล...');
+
+      const payload = {
+        action: 'borrow',
+        studentId: document.getElementById('student-id').value.trim(),
+        studentName: document.getElementById('student-name').value.trim(),
+        dueDate: document.getElementById('due-date').value.replace('T', ' '),
+        items: selectedItems,
+        signatureBase64: canvas.toDataURL('image/png')
+      };
+
+      try {
+        const res = await fetch(GAS_API_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        showLoading(false);
+
+        if (result.status === 'success') {
+          alert(`✅ ยื่นคำขอเรียบร้อยแล้ว!\nรหัสตั๋วของคุณคือ: ${result.ticketId}\nระบบได้ส่งแจ้งเตือนให้อาจารย์เรียบร้อยแล้วครับ`);
+          document.getElementById('borrow-form').reset();
+          clearSignature();
+          selectedItems = [];
+          loadInventory();
+        } else {
+          alert('❌ เกิดข้อผิดพลาด: ' + result.message);
+        }
+      } catch (err) {
+        showLoading(false);
+        alert('❌ การเชื่อมต่อล้มเหลว: ' + err.message);
+      }
+    }
+
+    // Load Active Loans
+    async function loadActiveLoans(currentTab) {
+      const targetId = currentTab === 'status' ? 'active-loans-list' : 'return-loans-list';
+      const container = document.getElementById(targetId);
+      container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding: 20px;">กำลังโหลด...</p>';
+
+      try {
+        const res = await fetch(`${GAS_API_URL}?action=getActiveLoans`);
+        const json = await res.json();
+        
+        if (!json.loans || json.loans.length === 0) {
+          container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding: 20px;">ไม่มีรายการที่อยู่ระหว่างการยืม</p>';
+          return;
+        }
+
+        container.innerHTML = '';
+        json.loans.forEach(loan => {
+          const div = document.createElement('div');
+          const isApproved = loan.status === 'Approved';
+          div.className = `loan-item ${isApproved ? 'approved' : ''}`;
+          div.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div>
+                <strong style="font-size:0.95rem;">${loan.itemName}</strong>
+                <p style="font-size:0.8rem; color:var(--text-muted);">ผู้ยืม: ${loan.studentName} (${loan.studentId})</p>
+                <p style="font-size:0.75rem; color:#475569; margin-top:3px;">กำหนดคืน: <strong>${loan.dueDate}</strong></p>
+              </div>
+              <span class="badge ${isApproved ? 'badge-available' : 'badge-borrowed'}">
+                ${isApproved ? 'อนุมัติแล้ว' : 'รออาจารย์อนุมัติ'}
+              </span>
+            </div>
+            ${currentTab === 'return' ? `
+              <button onclick="handleReturn('${loan.ticketId}', '${loan.itemName}')" style="margin-top:10px; width:100%; padding:8px; background:#1e293b; color:white; border:none; border-radius:6px; font-size:0.8rem; font-weight:500; cursor:pointer;">
+                📥 รับคืนอุปกรณ์ชิ้นนี้
+              </button>
+            ` : ''}
+          `;
+          container.appendChild(div);
+        });
+      } catch (err) {
+        container.innerHTML = `<p style="color:red;font-size:0.85rem;text-align:center;">โหลดไม่สำเร็จ: ${err.message}</p>`;
+      }
+    }
+
+    // Handle Return by Staff
+    async function handleReturn(ticketId, itemName) {
+      const pin = prompt(`ยืนยันการรับคืน:\n[${itemName}]\n\nกรุณาใส่รหัส PIN 4 หลักของเจ้าหน้าที่:`);
+      if (!pin) return;
+
+      showLoading(true, 'กำลังตรวจสอบ PIN และบันทึกการส่งคืน...');
+      try {
+        const res = await fetch(GAS_API_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'return', ticketId: ticketId, pin: pin })
+        });
+        const result = await res.json();
+        showLoading(false);
+
+        if (result.status === 'success') {
+          alert('✅ รับคืนอุปกรณ์สำเร็จ!');
+          loadActiveLoans('return');
+        } else {
+          alert('❌ ' + result.message);
+        }
+      } catch (err) {
+        showLoading(false);
+        alert('❌ เกิดข้อผิดพลาด: ' + err.message);
+      }
+    }
+
+    function showLoading(show, text) {
+      const el = document.getElementById('loading');
+      if (text) document.getElementById('loading-text').innerText = text;
+      el.style.display = show ? 'flex' : 'none';
+    }
+
+    // เริ่มต้นโหลดอุปกรณ์
+    loadInventory();
+  </script>
+</body>
+</html>
