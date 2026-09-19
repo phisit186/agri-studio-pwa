@@ -60,9 +60,9 @@
     .form-group input:focus { border-color: var(--primary); }
 
     /* Photo Upload Box */
-    .photo-btn { width: 100%; padding: 14px; background: #f8fafc; border: 1.5px dashed #94a3b8; border-radius: 10px; font-size: 0.85rem; font-weight: 500; color: #334155; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .photo-btn { width: 100%; padding: 12px; background: #f8fafc; border: 1.5px dashed #94a3b8; border-radius: 10px; font-size: 0.85rem; font-weight: 500; color: #334155; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .photo-preview-wrap { position: relative; margin-top: 10px; display: none; }
-    .photo-preview-wrap img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
+    .photo-preview-wrap img { width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
     .photo-del-btn { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 0.8rem; }
 
     /* Signature Pad */
@@ -74,7 +74,7 @@
     .btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3); }
     .btn-primary:active { background: var(--primary-dark); }
 
-    .loan-item { border-left: 4px solid var(--warning); border-radius: 8px; padding: 12px 14px; background: white; margin-bottom: 10px; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .loan-item { border-left: 4px solid var(--warning); border-radius: 8px; padding: 12px 14px; background: white; margin-bottom: 12px; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .loan-item.approved { border-left-color: var(--primary); }
 
     .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.88); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 200; }
@@ -98,14 +98,13 @@
     <!-- TAB 1: ยืมอุปกรณ์ -->
     <section id="tab-borrow" class="tab-content active">
       
-      <!-- Guideline Card สำหรับนักศึกษา -->
       <div class="guideline-card">
-        <h3>📌 แนวปฏิบัติในการยืม-คืนอุปกรณ์ (อ่านก่อนยืม)</h3>
+        <h3>📌 แนวปฏิบัติในการยืมอุปกรณ์ (อ่านก่อนยืม)</h3>
         <ul>
-          <li><strong>ตรวจสอบอุปกรณ์:</strong> ตรวจรับอุปกรณ์และอุปกรณ์เสริม (แบต, สายต่อ, เพลท) ให้ครบถ้วน</li>
-          <li><strong>ห้ามส่งต่อ:</strong> ผู้ลงนามมีภาระผูกพันตามกฎ ห้ามส่งต่อให้ผู้อื่นใช้แทนโดยไม่ผ่านระบบ</li>
-          <li><strong>ส่งคืนตรงเวลา:</strong> หากเกินกำหนดจะถูกระงับสิทธิ์การใช้งานในครั้งถัดไป</li>
-          <li><strong>ความรับผิดชอบ:</strong> หากชำรุด สูญหาย ผู้ยืมต้องรับผิดชอบซ่อมแซมหรือชดใช้ตามระเบียบคณะ</li>
+          <li><strong>ผู้ถือกุญแจ:</strong> พี่ผู้ถือกุญแจทำหน้าที่เปิด-ปิดห้องเท่านั้น ไม่ได้เป็นผู้ตรวจรับพัสดุ</li>
+          <li><strong>ห้ามส่งต่อ:</strong> ผู้ลงนามมีภาระผูกพันตามกฎหมาย ห้ามส่งต่ออุปกรณ์ให้ผู้อื่นเด็ดขาด</li>
+          <li><strong>ถ่ายภาพก่อนนำออก:</strong> ถ่ายภาพตัวเครื่องจริงร่วมกับผู้เปิดห้อง เพื่อเป็นหลักฐานตรวจรับ</li>
+          <li><strong>การส่งคืน:</strong> ต้องนำของมาวางในห้อง ถ่ายภาพสภาพคืน และให้อาจารย์เป็นผู้ใส่ PIN ตรวจรับ</li>
         </ul>
       </div>
 
@@ -133,10 +132,10 @@
           </div>
         </div>
 
-        <!-- กล้องถ่ายภาพสภาพอุปกรณ์ -->
+        <!-- ถ่ายภาพตอนเบิก -->
         <div class="card">
-          <h2>3. ภาพถ่ายสภาพอุปกรณ์ (Visual Check-in)</h2>
-          <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom: 8px;">ถ่ายภาพรวมตัวเครื่องหรือจุดที่มีตำหนิเดิมต่อหน้าเจ้าหน้าที่</p>
+          <h2>3. ภาพถ่ายสภาพอุปกรณ์ก่อนนำออก (Visual Check-in)</h2>
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom: 8px;">ถ่ายภาพรวมตัวเครื่องหรือจุดที่มีตำหนิเดิมร่วมกับผู้เปิดห้อง</p>
           
           <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoCapture(event)">
           <button type="button" class="photo-btn" onclick="document.getElementById('camera-input').click()">
@@ -151,7 +150,7 @@
 
         <div class="card">
           <h2>4. ลายเซ็นดิจิทัลผู้ยืม</h2>
-          <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom: 8px;">เซ็นชื่อยอมรับแนวปฏิบัติด้านบนและรับผิดชอบอุปกรณ์</p>
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom: 8px;">เซ็นชื่อรับทราบภาระความรับผิดชอบทรัพย์สิน</p>
           <div class="sig-wrapper">
             <canvas id="sig-pad"></canvas>
             <div class="sig-tools">
@@ -174,11 +173,13 @@
       </div>
     </section>
 
-    <!-- TAB 3: เจ้าหน้าที่รับคืน -->
+    <!-- TAB 3: อาจารย์ตรวจรับคืน -->
     <section id="tab-return" class="tab-content">
       <div class="card">
-        <h2>สำหรับเจ้าหน้าที่ห้องสตูดิโอ</h2>
-        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom: 12px;">ตรวจนับของเสริมให้ครบ แล้วใส่รหัส PIN เพื่อรับคืน</p>
+        <h2>ตรวจรับคืนอุปกรณ์ (สำหรับอาจารย์)</h2>
+        <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom: 12px;">
+          🔒 พี่ผู้ถือกุญแจเปิดห้องเพื่อวางของเท่านั้น การตรวจรับและปลดเปลื้องภาระให้นักศึกษาต้องกระทำโดยอาจารย์ผู้ถือรหัส PIN
+        </p>
         <div id="return-loans-list">
           <p style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding: 20px;">กำลังโหลด...</p>
         </div>
@@ -194,7 +195,7 @@
       <span>🔍</span> ตรวจสถานะ
     </button>
     <button class="nav-item" onclick="switchTab('return')">
-      <span>📦</span> เจ้าหน้าที่คืนของ
+      <span>📦</span> อาจารย์ตรวจรับคืน
     </button>
   </nav>
 
@@ -203,18 +204,48 @@
 
     let inventoryData = [];
     let selectedItems = [];
-    let photoBase64 = "";
+    let borrowPhotoBase64 = "";
+    let returnPhotosMap = {}; // เก็บภาพตอนคืนแยกตาม ticketId
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(console.error);
     }
 
-    // Photo Compression
+    // Photo Compression - ตอนเบิก
     function handlePhotoCapture(e) {
       const file = e.target.files[0];
       if (!file) return;
 
       showLoading(true, 'กำลังปรับแต่งรูปภาพ...');
+      compressImage(file, (base64) => {
+        borrowPhotoBase64 = base64;
+        document.getElementById('photo-preview').src = base64;
+        document.getElementById('photo-preview-wrap').style.display = 'block';
+        showLoading(false);
+      });
+    }
+
+    function removePhoto() {
+      borrowPhotoBase64 = "";
+      document.getElementById('camera-input').value = "";
+      document.getElementById('photo-preview-wrap').style.display = 'none';
+    }
+
+    // Photo Compression - ตอนส่งคืน
+    function handleReturnPhotoCapture(e, ticketId) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      showLoading(true, 'กำลังปรับแต่งรูปภาพตอนคืน...');
+      compressImage(file, (base64) => {
+        returnPhotosMap[ticketId] = base64;
+        document.getElementById(`return-preview-${ticketId}`).src = base64;
+        document.getElementById(`return-preview-wrap-${ticketId}`).style.display = 'block';
+        showLoading(false);
+      });
+    }
+
+    function compressImage(file, callback) {
       const reader = new FileReader();
       reader.onload = function(event) {
         const img = new Image();
@@ -238,21 +269,11 @@
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
-
-          photoBase64 = canvas.toDataURL('image/jpeg', 0.75);
-          document.getElementById('photo-preview').src = photoBase64;
-          document.getElementById('photo-preview-wrap').style.display = 'block';
-          showLoading(false);
+          callback(canvas.toDataURL('image/jpeg', 0.75));
         };
         img.src = event.target.result;
       };
       reader.readAsDataURL(file);
-    }
-
-    function removePhoto() {
-      photoBase64 = "";
-      document.getElementById('camera-input').value = "";
-      document.getElementById('photo-preview-wrap').style.display = 'none';
     }
 
     // Canvas Setup
@@ -389,7 +410,7 @@
         dueDate: document.getElementById('due-date').value.replace('T', ' '),
         items: selectedItems,
         signatureBase64: canvas.toDataURL('image/png'),
-        photoBase64: photoBase64
+        photoBase64: borrowPhotoBase64
       };
 
       try {
@@ -435,21 +456,33 @@
           const div = document.createElement('div');
           const isApproved = loan.status === 'Approved';
           div.className = `loan-item ${isApproved ? 'approved' : ''}`;
+          
           div.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
               <div>
                 <strong style="font-size:0.95rem;">${loan.itemName}</strong>
                 <p style="font-size:0.8rem; color:var(--text-muted);">ผู้ยืม: ${loan.studentName} (${loan.studentId})</p>
                 <p style="font-size:0.75rem; color:#475569; margin-top:3px;">กำหนดคืน: <strong>${loan.dueDate}</strong></p>
+                ${loan.borrowPhotoUrl ? `<p style="margin-top:4px;"><a href="${loan.borrowPhotoUrl}" target="_blank" style="font-size:0.75rem; color:#0284c7; text-decoration:none;">🔍 ดูภาพสภาพตอนเบิก</a></p>` : ''}
               </div>
               <span class="badge ${isApproved ? 'badge-available' : 'badge-borrowed'}">
                 ${isApproved ? 'อนุมัติแล้ว' : 'รออาจารย์อนุมัติ'}
               </span>
             </div>
+
             ${currentTab === 'return' ? `
-              <button onclick="handleReturn('${loan.ticketId}', '${loan.itemName}')" style="margin-top:10px; width:100%; padding:8px; background:#1e293b; color:white; border:none; border-radius:6px; font-size:0.8rem; font-weight:500; cursor:pointer;">
-                📥 รับคืนอุปกรณ์ชิ้นนี้
-              </button>
+              <div style="margin-top:12px; border-top:1px dashed #cbd5e1; padding-top:10px;">
+                <input type="file" id="return-cam-${loan.ticketId}" accept="image/*" capture="environment" style="display:none;" onchange="handleReturnPhotoCapture(event, '${loan.ticketId}')">
+                <button type="button" class="photo-btn" onclick="document.getElementById('return-cam-${loan.ticketId}').click()" style="padding:8px; font-size:0.78rem;">
+                  📷 ถ่ายภาพสภาพของที่นำมาวางคืนในห้อง
+                </button>
+                <div class="photo-preview-wrap" id="return-preview-wrap-${loan.ticketId}">
+                  <img id="return-preview-${loan.ticketId}" src="">
+                </div>
+                <button onclick="handleReturn('${loan.ticketId}', '${loan.itemName}')" style="margin-top:8px; width:100%; padding:10px; background:#1e293b; color:white; border:none; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer;">
+                  📥 อาจารย์ยืนยันรับคืน (ใส่ PIN)
+                </button>
+              </div>
             ` : ''}
           `;
           container.appendChild(div);
@@ -460,20 +493,31 @@
     }
 
     async function handleReturn(ticketId, itemName) {
-      const pin = prompt(`ยืนยันการรับคืน:\n[${itemName}]\n\nกรุณาใส่รหัส PIN 4 หลักของเจ้าหน้าที่:`);
+      if (!returnPhotosMap[ticketId]) {
+        const confirmNoPhoto = confirm('⚠️ ยังไม่ได้ถ่ายภาพของที่นำมาวางคืนในห้องสตูดิโอ\n\nต้องการดำเนินการต่อโดยไม่มีภาพถ่ายยืนยันหรือไม่?');
+        if (!confirmNoPhoto) return;
+      }
+
+      const pin = prompt(`ยืนยันการรับคืน:\n[${itemName}]\n\nกรุณาใส่รหัส PIN 4 หลักของอาจารย์:`);
       if (!pin) return;
 
-      showLoading(true, 'กำลังบันทึกการรับคืน...');
+      showLoading(true, 'กำลังบันทึกการรับคืนและจัดเก็บหลักฐานภาพถ่าย...');
       try {
         const res = await fetch(GAS_API_URL, {
           method: 'POST',
-          body: JSON.stringify({ action: 'return', ticketId: ticketId, pin: pin })
+          body: JSON.stringify({
+            action: 'return',
+            ticketId: ticketId,
+            pin: pin,
+            photoBase64: returnPhotosMap[ticketId] || ""
+          })
         });
         const result = await res.json();
         showLoading(false);
 
         if (result.status === 'success') {
-          alert('✅ รับคืนอุปกรณ์สำเร็จ!');
+          alert('✅ อาจารย์บันทึกรับคืนและจัดเก็บภาพหลักฐานเรียบร้อยแล้ว!');
+          delete returnPhotosMap[ticketId];
           loadActiveLoans('return');
         } else {
           alert('❌ ' + result.message);
